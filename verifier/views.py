@@ -18,6 +18,7 @@ def send_code(request):
     except KeyError:
         return HttpResponse("No phone number provided.", status = 400)
     code = ''.join([random.choice(string.digits) for _ in range(VERIFICATION_CODE_LENGTH)])
+    VerificationCode.objects.filter(phone_number = phone_number).delete()
     verification_code = VerificationCode(phone_number = phone_number, code = code)
     try:
         twilio_message = twilio.messages.create(
