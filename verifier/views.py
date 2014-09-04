@@ -26,7 +26,7 @@ def send_code(request):
             to = phone_number,
             from_ = "+17315990087"
         )
-    except twilio.rest.TwilioRestException as error:
+    except twilio.rest.exceptions.TwilioRestException as error:
         return HttpResponse("Error sending verification SMS: %s" % str(error), status = 400)
     verification_code.save()
     return HttpResponse()
