@@ -3,15 +3,14 @@ from django.http import HttpResponse
 
 import string, random, logging
 
-from twilio.rest import TwilioRestClient
-import twilio
+import twilio.rest
 
 from sms_verification import twilio_secrets
 
 from verifier.models import VerificationCode, VERIFICATION_CODE_LENGTH
 
 logger = logging.getLogger(__name__)
-twilio_client = TwilioRestClient(twilio_secrets.TWILIO_ACCOUNT_SID, twilio_secrets.TWILIO_AUTH_TOKEN)
+twilio_client = twilio.rest.TwilioRestClient(twilio_secrets.TWILIO_ACCOUNT_SID, twilio_secrets.TWILIO_AUTH_TOKEN)
 
 def send_code(request):
     try:
@@ -27,7 +26,7 @@ def send_code(request):
             to = phone_number,
             from_ = "+17315990087"
         )
-    except twilio.TwilioRestException as error:
+    except twilio.rest.TwilioRestException as error:
         return HttpResponse("Error sending verification SMS: %s" % str(error), status = 400)
     verification_code.save()
     return HttpResponse()
